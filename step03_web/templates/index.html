@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <button onclick="dataReq()">클릭</button>
+
+    <br><br>
+
+    <!-- 
+        tag의 속성으로 css를 적용하는 inline 방식
+        tag가 존재하나 안 보이게 하는 방식
+        단 display: block인 경우 tag가 보임 
+        style="display: none;
+    -->
+    <table id="t" border="1" style="display: none;">
+        <!-- <tr><th>key</th><th>doc_count</th></tr> -->
+        <tr><th>key</th></tr> 
+        <div id="dataview">
+        </div>
+    </table>
+    <script>
+        /* 
+        1단계 : 응답 받은 데이터를 json 포멧의 객체로 변환
+        2단계 : key로 데이터들을 뽑아서 div tag에 html의 table로 생성
+        */
+        function dataReq() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    data = this.responseText;
+                    // app에서 return str(data) 사용하면 밑의 40번 주석 가능
+                    // data = "["+data+"]";
+                    data = eval("(" + data + ")")
+                    console.log(data);
+                    // table 스타일을 block 값으로 수정
+                    style="display: none;"
+                    document.getElementById("t").style.display = "block";
+                    // table row 생성
+                    // tb 값을 미리 만들어놓는거 = header 값을 생성함
+                    tb = "<tr><td> key </td><td> doc_count </td></tr>";
+                    for(i=0; i < data.length; i++){
+                        tb = tb + "<tr><td>"+ data[i].key + "</td><td>" + data[i].doc_count + "</td></tr>"
+                    }
+                    document.getElementById("t").innerHTML = tb;
+                }
+            };
+            xhttp.open("GET", "dataget");
+            xhttp.send();
+        }
+    </script>
+    
+    <!--
+    <table id="t" border="1" style="display: none;">
+        <tr><th>key</th><th>doc_count</th></tr>
+
+
+        <div id="dataview">
+
+        </div>
+    </table>
+
+
+
+
+
+    <script>
+        /* 
+        1 단계: 응답 받은 데이터를 json 포멧의 객체로 변환
+        2 단계: key
+
+        */
+
+        function dataReq() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    data = this.responseText;
+                    data = "[" + data + "]";
+                    data = eval("(" + data + ")")
+                    console.log(data);
+
+                    // table 스차일을 blick 값으로 수정
+                    // style="display: none;"
+                    document.getElementById("t").style.display = "block";
+                    // table row 생성
+                    tb = ""
+                    for (i=0, i<data.length; i++) {
+                        // tb = "<tr>"
+                        // tb = tb + "<td>" + data[i].key + "</td>"
+                        // tb = tb + "</tr>"
+                        tb = tb + "<tr><td>" + data[i].key + "</td></tr>"
+                    }
+                }
+            };
+            xhttp.open("GET", "dataget");
+            xhttp.send();
+        }
+    </script>
+    -->
+
+
+</body>
+
+</html>
